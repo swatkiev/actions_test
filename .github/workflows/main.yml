@@ -99,3 +99,4 @@ jobs:
          sudo apt install -y sshpass
          echo -e " \nThis is prod version" >> site/index.html
          sshpass -e scp -P 22987 -oStrictHostKeyChecking=no site/index.html ${{ secrets.DEPLOY_HOST }}
+
