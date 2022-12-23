@@ -6,7 +6,11 @@ name: deploy_new_site
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches:
+      - 'main'
+    tags: 
+      - 'test*'
+      - 'prod*'
     
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -54,7 +58,7 @@ jobs:
           
   deploy_part_test:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/tags/test' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref =~ 'refs/tags/test*' }}
     needs: [build_part,test_part]
     
     steps:
@@ -72,7 +76,7 @@ jobs:
   
   manual_approve_prod:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/prod' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.ref =~ 'refs/tags/prod*' }}
     needs: [build_part,test_part]
     environment:
       name: approvers
@@ -84,7 +88,7 @@ jobs:
                    
   deploy_part_prod:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/prod' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.ref =~ 'refs/tags/prod*' }}
     needs: [build_part,test_part,manual_approve_prod]
     
     steps:
