@@ -24,8 +24,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Build part
         run: |
-          apt update 
-          apt install -y markdown 
+          sudo apt update 
+          sudo apt install -y markdown 
           mkdir -p public 
           markdown website.md | tee public/index.html
           
@@ -45,8 +45,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Test part
         run: |
-          apt update 
-          apt install -y libxml2-utils 
+          sudo apt update 
+          sudo apt install -y libxml2-utils 
           xmllint --html public/index.html   
           
   deploy_part:
@@ -57,7 +57,7 @@ jobs:
     steps:
       - name: Deploy part
         run: |
-         apt update
-         apt install -y sshpass
+         sudo apt update
+         sudo apt install -y sshpass
          echo -e " \nThis is deploy version" >> ./public/index.html
          sshpass -e scp -P 22987 -oStrictHostKeyChecking=no ./public/index.html ${{ secrets.DEPLOY_HOST }}
