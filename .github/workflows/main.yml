@@ -64,5 +64,5 @@ jobs:
         run: |
          sudo apt update
          sudo apt install -y sshpass
-         echo -e " \nThis is deploy version" >> ./public/index.html
+         echo -e " \nThis is deploy version" >> ./index.html
          sshpass -e scp -P 22987 -oStrictHostKeyChecking=no ./index.html ${{ secrets.DEPLOY_HOST }}
