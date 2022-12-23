@@ -52,9 +52,9 @@ jobs:
           sudo apt install -y libxml2-utils 
           xmllint --html site/index.html   
           
-  deploy_part:
+  deploy_part_test:
     runs-on: ubuntu-latest
-    if: contains( github.ref, 'main')
+    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/test' }}
     needs: [build_part,test_part]
     
     steps:
@@ -67,5 +67,24 @@ jobs:
         run: |
          sudo apt update
          sudo apt install -y sshpass
-         echo -e " \nThis is deploy version" >> site/index.html
+         echo -e " \nThis is test version" >> site/index.html
+         sshpass -e scp -P 22987 -oStrictHostKeyChecking=no site/index.html ${{ secrets.DEPLOY_HOST }}
+         
+                   
+  deploy_part_prod:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/prod' }}
+    needs: [build_part,test_part]
+    
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Deploy part
+        env:
+          SSHPASS : ${{ secrets.SSHPASS }}
+        run: |
+         sudo apt update
+         sudo apt install -y sshpass
+         echo -e " \nThis is prod version" >> site/index.html
          sshpass -e scp -P 22987 -oStrictHostKeyChecking=no site/index.html ${{ secrets.DEPLOY_HOST }}
