@@ -42,6 +42,9 @@ jobs:
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:   
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        
       # Runs a single command using the runners shell
       - name: Test part
         run: |
@@ -55,6 +58,9 @@ jobs:
     needs: [build_part,test_part]
     
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        
       - name: Deploy part
         run: |
          sudo apt update
