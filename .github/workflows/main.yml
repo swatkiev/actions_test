@@ -69,12 +69,23 @@ jobs:
          sudo apt install -y sshpass
          echo -e " \nThis is test version" >> site/index.html
          sshpass -e scp -P 22987 -oStrictHostKeyChecking=no site/index.html ${{ secrets.DEPLOY_HOST }}
-         
+  
+  manual_approve_prod:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/tags/prod' }}
+    needs: [build_part,test_part]
+    environment:
+      name: approvers
+    
+    steps:
+    - name: manual approve
+      run: |
+        echo "Manually approved"
                    
   deploy_part_prod:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/prod' }}
-    needs: [build_part,test_part]
+    needs: [build_part,test_part,manual_approve_prod]
     
     steps:
       - name: Download artifacts
