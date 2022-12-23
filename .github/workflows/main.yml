@@ -26,8 +26,7 @@ jobs:
         run: |
           sudo apt update 
           sudo apt install -y markdown  
-          markdown website.md 
-          cat website.md > index.html
+          markdown website.md \\| tee index.html
           cat index.html
           
       - name: Upload math result for build_part
