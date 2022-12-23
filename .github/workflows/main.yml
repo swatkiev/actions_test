@@ -25,14 +25,13 @@ jobs:
       - name: Build part
         run: |
           sudo apt update 
-          sudo apt install -y markdown 
-          mkdir -p public 
-          markdown website.md | tee public/index.html
+          sudo apt install -y markdown  
+          markdown website.md | tee index.html
           
       - name: Upload math result for build_part
         uses: actions/upload-artifact@v3
         with:
-          name: public
+          name: html site
           path: index.html
           
   test_part:
@@ -50,7 +49,7 @@ jobs:
         run: |
           sudo apt update 
           sudo apt install -y libxml2-utils 
-          xmllint --html public/index.html   
+          xmllint --html index.html   
           
   deploy_part:
     runs-on: ubuntu-latest
@@ -66,4 +65,4 @@ jobs:
          sudo apt update
          sudo apt install -y sshpass
          echo -e " \nThis is deploy version" >> ./public/index.html
-         sshpass -e scp -P 22987 -oStrictHostKeyChecking=no ./public/index.html ${{ secrets.DEPLOY_HOST }}
+         sshpass -e scp -P 22987 -oStrictHostKeyChecking=no ./index.html ${{ secrets.DEPLOY_HOST }}
