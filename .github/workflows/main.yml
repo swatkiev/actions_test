@@ -32,8 +32,8 @@ jobs:
       - name: Upload math result for build_part
         uses: actions/upload-artifact@v3
         with:
-          name: site
-          path: public/index.html
+          name: public
+          path: index.html
           
   test_part:
     # The type of runner that the job will run on
