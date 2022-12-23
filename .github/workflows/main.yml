@@ -84,7 +84,7 @@ jobs:
                    
   deploy_part_prod:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/prod' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/tags/prod' }}
     needs: [build_part,test_part,manual_approve_prod]
     
     steps:
