@@ -54,7 +54,7 @@ jobs:
           
   deploy_part_test:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.ref == 'refs/tags/test' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/tags/test' }}
     needs: [build_part,test_part]
     
     steps:
