@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - production
     tags: 
       - test*
       - prod*
@@ -76,7 +77,7 @@ jobs:
   
   manual_approve_prod:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/prod') && startsWith(github.ref, 'refs/heads/main') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/prod') || startsWith(github.ref, 'refs/heads/production') }}
     needs: [build_part,test_part]
     environment:
       name: approvers
@@ -88,7 +89,7 @@ jobs:
                    
   deploy_part_prod:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/prod') && startsWith(github.ref, 'refs/heads/main') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/prod') || startsWith(github.ref, 'refs/heads/production') }}
     needs: [build_part,test_part,manual_approve_prod]
     
     steps:
